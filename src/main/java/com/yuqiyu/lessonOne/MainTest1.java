@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MainTest1 {
     /**
-     *  merge V0.7
+     *  merge V0.8
      * @param args
      */
     public static void main(String[] args) {
