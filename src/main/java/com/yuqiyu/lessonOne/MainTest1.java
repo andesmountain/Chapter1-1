@@ -6,6 +6,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MainTest1 {
+    /**
+     * checkout king
+     * @param args
+     */
     public static void main(String[] args) {
         ClassPathXmlApplicationContext cac = new ClassPathXmlApplicationContext("beans.xml");
 
