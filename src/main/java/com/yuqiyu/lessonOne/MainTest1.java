@@ -8,6 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class MainTest1 {
     /**
      *  merge V0.7
+     *  -- reking
      * @param args
      */
     public static void main(String[] args) {
