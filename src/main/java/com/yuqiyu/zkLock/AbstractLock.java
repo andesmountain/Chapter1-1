@@ -13,6 +13,6 @@ public abstract class AbstractLock implements Lock {
 
     public abstract boolean tryLock();
 
-
-    public abstract boolean unLock();
+    
+    public abstract void waitLock();
 }
