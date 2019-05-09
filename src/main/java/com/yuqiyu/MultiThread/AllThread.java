@@ -5,7 +5,7 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 
 /**
- * 天生就是多线程的
+ * java天生就是多线程的
  */
 public class AllThread {
     public static void main(String[] args) {
