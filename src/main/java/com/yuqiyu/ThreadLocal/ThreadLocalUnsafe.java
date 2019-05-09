@@ -34,12 +34,17 @@ public class ThreadLocalUnsafe implements Runnable {
     public void run() {
         num.setNum(num.getNum()+1);
         tl.set(num);
+
+        /*Number nn = tl.get();
+        nn.setNum(nn.getNum()+1);
+        tl.set(nn);*/
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(Thread.currentThread().getName()+":"+ num.getNum());
+        System.out.println(Thread.currentThread().getName()+":"+ tl.get().getNum());
     }
 
 
