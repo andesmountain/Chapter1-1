@@ -1,5 +1,8 @@
 package com.yuqiyu.MultiThread;
 
+/**
+ * sleep 使程序由运行状态转变到阻塞状态，但不会释放锁
+ */
 public class SleepLock {
     private Object lock = new Object();
 
