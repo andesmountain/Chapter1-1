@@ -14,30 +14,14 @@ import java.util.concurrent.TimeUnit;
  * 公司：北京活力天汇<br>
  **/
 public class ThreadLocalOOM2 extends Thread {
-    private static final int TASK_POOL_SIZE=500;
-
-
-     static ThreadLocal<Object> tl1 = new ThreadLocal<>();
-     static ThreadLocal<Object> tl2 = new ThreadLocal<>();
-    static ThreadLocal<Object> tl3 = new ThreadLocal<>();
-    public static void main(String[] args) throws InterruptedException {
-        System.out.println("tl1.set,并重置为null");
-        tl1.set(new byte[1024*1024*5]);
-        tl1=null;
-        Thread.sleep(5000);
-
-        System.out.println("tl2.set");
-        tl2.set(new byte[1024*1024*5]);
-        tl2=null;
-        Thread.sleep(5000);
-
-        System.out.println("tl3.set ");
-        tl3.set(new byte[1024*1024*5]);
-        Thread.sleep(1000);
-
-        System.out.println(tl1);
-        System.out.println(tl2);
-        System.out.println(tl3);
+    public static void main(String[] args) {
+        Object[] arr = new Object[8];
+        for(int i=0;i<8;i++){
+            System.out.println("set第"+(i+1)+"个对象");
+            ThreadLocal<byte[]> tl = new ThreadLocal<>();
+            tl.set(new byte[1024*1024*5]);
+            // arr[i]=tl;
+            //System.gc();
+        }
     }
-
 }
