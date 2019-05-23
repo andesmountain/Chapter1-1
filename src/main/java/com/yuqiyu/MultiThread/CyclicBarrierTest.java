@@ -1,36 +1,46 @@
 package com.yuqiyu.MultiThread;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CyclicBarrier;
 
+
+/**
+ * 版权: Copyright (c) 2011-2018 <br>
+ * 公司: 北京活力天汇 <br>
+ *
+ * @author dell
+ * @date 2019/5/22
+ * 公司：北京活力天汇<br>
+ **/
 public class CyclicBarrierTest {
 
-    // 如果只是HashMap   多线程情况下有可能导致put数据丢失或者不准确
-    public static Map<String,String> mm = new ConcurrentHashMap<>();
+    public static Map<String,Integer> result = new ConcurrentHashMap<>();
 
-    public static CyclicBarrier barrier = new CyclicBarrier(2,()->{
-        System.out.println("指定数量线程执行await后，调用汇总方法");
-        for(Map.Entry<String,String> entry: mm.entrySet()){
+    public static CyclicBarrier barrier = new CyclicBarrier(4,()->{
+        System.out.println("汇总任务启动");
+        int rs = 0;
+        for(Map.Entry<String,Integer> entry:result.entrySet()){
             System.out.println(entry.getKey()+":"+entry.getValue());
+            rs += entry.getValue();
         }
+        System.out.println("rs="+rs);
     });
+
 
 
     public static void main(String[] args) {
         for(int i=0;i<4;i++){
             Thread t = new Thread(()->{
-                System.out.println(Thread.currentThread().getName()+"start");
+                System.out.println(Thread.currentThread().getName()+"启动");
                 try {
-                    mm.put(Thread.currentThread().getName(),Thread.currentThread().getId()+"");
-                    // 如果还未到达barrier放开栅栏的数量，则该线程等待
+                    Random random = new Random();
+
+                    result.put(Thread.currentThread().getName(),random.nextInt(10));
                     barrier.await();
-                    // 放开后继续执行
-                    System.out.println(Thread.currentThread().getName() +" wake");
-                    // 这里会再次等待，达到数量后触发汇总方法
-                    //barrier.await();
+                    System.out.println(Thread.currentThread().getName()+"唤醒后继续执行");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (BrokenBarrierException e) {
@@ -40,10 +50,12 @@ public class CyclicBarrierTest {
             t.start();
             try {
                 Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
 
 }
