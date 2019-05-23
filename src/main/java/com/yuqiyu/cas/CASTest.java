@@ -21,7 +21,10 @@ public class CASTest {
 
     public static void main(String[] args) {
         AtomicInteger ai = new AtomicInteger(10);
-        System.out.println(ai.compareAndSet(10,20));
+        System.out.println(ai.compareAndSet(8,20));
+        // getAndSet 是采用死循环的方式更新新值
+        System.out.println(ai.getAndSet(30));
+        System.out.println(ai.get());
     }
 
     @Test
