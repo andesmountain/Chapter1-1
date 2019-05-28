@@ -1,7 +1,6 @@
 package com.yuqiyu.cas;
 
 import lombok.Data;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,7 +30,7 @@ public class CASTest {
     public void testArray(){
         int[] value = new int[]{1,2};
         AtomicIntegerArray arr = new AtomicIntegerArray(value);
-        // 修改第几项元素值
+        // 修改第几项元素值，同时会改动原数组的值
         arr.getAndSet(0,5);
         System.out.println(arr);
         System.out.println(value[0]);
@@ -62,6 +61,10 @@ public class CASTest {
     }
 
 
+    /**
+     * 带版本号，解决ABA问题
+     * @throws InterruptedException
+     */
     @Test
     public void testAtomicStampedReference() throws InterruptedException {
         AtomicStampedReference<String> asr = new AtomicStampedReference("abc",1);

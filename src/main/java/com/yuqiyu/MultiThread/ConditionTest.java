@@ -18,7 +18,7 @@ public class ConditionTest {
     public static Condition cond1 = lock.newCondition();
     public static Condition cond2 = lock.newCondition();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         for(int i=0;i<3;i++) {
             Thread t1 = new Thread(() -> {
                 lock.lock();
@@ -49,9 +49,12 @@ public class ConditionTest {
         }
 
         // 唤醒所有线程,首先得获取锁，signal后得释放锁
+        System.out.println("主线程获得锁，并唤醒cond1线程");
         lock.lock();
         cond1.signalAll();
-        System.out.println("唤醒cond1所有线程，同时释放锁");
+        Thread.sleep(3000);
+        cond2.signalAll();
+
         lock.unlock();
 
     }
