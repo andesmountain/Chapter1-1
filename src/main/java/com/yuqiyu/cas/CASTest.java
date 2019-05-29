@@ -7,6 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicStampedReference;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 版权: Copyright (c) 2011-2018 <br>
@@ -82,6 +85,36 @@ public class CASTest {
         });
         t2.start();
 
+
+    }
+
+    @Test
+    public void testReetrantLock() throws InterruptedException {
+        Lock lock = new ReentrantLock();
+        Condition cond =  lock.newCondition();
+        Thread t1=new Thread(()->{
+            lock.lock();
+            try {
+                System.out.println("cond await");
+                cond.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }finally {
+                System.out.println("unlock");
+                lock.unlock();
+            }
+
+        });
+        t1.start();
+        Thread t2=new Thread(()->{
+            lock.lock();
+            System.out.println("signalAll");
+            cond.signalAll();
+        });
+        t2.start();
+
+        t2.join();
+        t1.join();
 
     }
 
