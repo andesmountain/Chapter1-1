@@ -93,27 +93,39 @@ public class CASTest {
         Lock lock = new ReentrantLock();
         Condition cond =  lock.newCondition();
         Thread t1=new Thread(()->{
+
             lock.lock();
+            System.out.println("1.lock.lock()  ");
+            System.out.println("没有锁的话，只会设置 setExclusiveOwnerThread setState");
+
             try {
-                System.out.println("cond await");
+                System.out.println("2.cond.await()");
+                System.out.println("addConditionWaiter  firstWaiter = lastWaiter  nextWaiter=null,waitStatus=-2,thread=Thread[Thread-1,5,main]");
+                System.out.println("fullyRelease   setState(0)  setExclusiveOwnerThread(null)  head=tail=null");
+                System.out.println("isOnSyncQueue(node)=false   LockSupport.park(this)   跳出线程并阻塞");
                 cond.await();
+                System.out.println("5."+Thread.currentThread()+" 被唤醒");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }finally {
-                System.out.println("unlock");
                 lock.unlock();
             }
 
         });
         t1.start();
-        Thread t2=new Thread(()->{
-            lock.lock();
-            System.out.println("signalAll");
-            cond.signalAll();
-        });
-        t2.start();
 
-        t2.join();
+        Thread.sleep(10);
+        lock.lock();
+        cond.signal();
+        System.out.println("3.cond.signal ");
+        System.out.println("从firstWaiter往后，将condition队列中的node enq 到lock队列中");
+        System.out.println("lock  head: waitStatus=-1,thread=null   tail:waitStatus=0,thread=Thread[Thread-1,5,main]");
+        System.out.println("condition  firstWaiter=lastWaiter=null");
+        lock.unlock();
+        System.out.println("4. lock.unlock()");
+        System.out.println("tryRelease(1)  h=head: waitStatus=-1   ");
+        System.out.println("unparkSuccessor(h)   s=head.next=lastWaiter!=null  LockSupport.unpark(s.thread)");
+
         t1.join();
 
     }
