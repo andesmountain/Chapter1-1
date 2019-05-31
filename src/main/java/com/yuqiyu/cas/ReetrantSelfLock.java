@@ -16,7 +16,20 @@ import java.util.concurrent.locks.Lock;
  **/
 public class ReetrantSelfLock implements Lock {
 
-    private static final class sync extends AbstractQueuedSynchronizer{
+    private final Sync sync;
+
+    public ReetrantSelfLock() {
+        sync = new Sync();
+    }
+
+    static class Sync   extends AbstractQueuedSynchronizer{
+        protected void lock() {
+            if (compareAndSetState(0, 1))
+                setExclusiveOwnerThread(Thread.currentThread());
+            else
+                acquire(1);
+        }
+
         @Override
         protected boolean tryAcquire(int arg) {
             if(getExclusiveOwnerThread()==Thread.currentThread()){
@@ -45,12 +58,16 @@ public class ReetrantSelfLock implements Lock {
             }
             return false;
         }
+
+        protected ConditionObject newCondition(){
+            return new ConditionObject();
+        }
     }
 
 
     @Override
     public void lock() {
-
+        sync.lock();
     }
 
     @Override
@@ -70,11 +87,11 @@ public class ReetrantSelfLock implements Lock {
 
     @Override
     public void unlock() {
-
+        sync.release(1);
     }
 
     @Override
     public Condition newCondition() {
-        return null;
+        return  sync.newCondition();
     }
 }

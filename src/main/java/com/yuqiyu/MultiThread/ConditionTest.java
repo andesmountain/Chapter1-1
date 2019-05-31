@@ -49,12 +49,13 @@ public class ConditionTest {
         }
 
         // 唤醒所有线程,首先得获取锁，signal后得释放锁
-        System.out.println("主线程获得锁，并唤醒cond1线程");
+        System.out.println("主线程获得锁，并唤醒cond1线程,只有释放了锁才会触发唤醒动作");
         lock.lock();
+
         cond1.signalAll();
-        Thread.sleep(3000);
         cond2.signalAll();
 
+        // 释放锁后才会触发唤醒
         lock.unlock();
 
     }
