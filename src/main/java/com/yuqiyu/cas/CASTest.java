@@ -110,7 +110,7 @@ public class CASTest {
         System.out.println("=== main get lock===");
         System.out.println("compareAndSetState(0, 1)  失败，进入acquire方法");
         System.out.println("addWaiter(Node.EXCLUSIVE)   新建Node new Node(Thread.currentThread(), mode)，并插入到tail后 ");
-        System.out.println("acquireQueued   如果前置节点是head且能获取到锁，则设置本节点为head；否则执行 shouldParkAfterFailedAcquire");
+        System.out.println("acquireQueued  死循环 如果前置节点是head且能获取到锁，则释放前置节点锁且设置本节点为head；否则执行 shouldParkAfterFailedAcquire");
         System.out.println("shouldParkAfterFailedAcquire   设置pred前置节点waitStatus=-1,表示pred后的节点进入等待队列，随时准备被唤醒");
         System.out.println("LockSupport.park(this)");
         lock.lock();
@@ -138,7 +138,7 @@ public class CASTest {
         System.out.println("unlock");
         System.out.println("CLH队列保证排在前面的Node比后面的Node先获取到锁，FIFO");
         System.out.println("非公平锁：老的线程排队使用锁；但是无法保证新线程抢占已经在排队的线程的锁。");
-        System.out.println("公平锁：老的线程排队使用锁，新线程仍然排队使用锁。");
+        System.out.println("公平锁：老的线程排队使用锁（hasQueuedPredecessors判断），新线程仍然排队使用锁。");
         lock.unlock();
         es.awaitTermination(10000000, TimeUnit.MINUTES);
     }
@@ -181,7 +181,7 @@ public class CASTest {
         System.out.println("4. lock.unlock()");
         System.out.println("tryRelease(arg)  判断 Thread.currentThread() == getExclusiveOwnerThread()   getState()-arg==0");
         System.out.println("若满足上面条件，表示锁已释放，唤醒等待队列上的锁  h=head: waitStatus=-1   ");
-        System.out.println("unparkSuccessor(h)   s=head.next=tail(waitStatus=0,thread=Thread[Thread-1,5,main]) !=null  LockSupport.unpark(s.thread)");
+        System.out.println("unparkSuccessor(h)   s=node.next(waitStatus=0,thread=Thread[Thread-1,5,main]) !=null  LockSupport.unpark(s.thread)");
         lock.unlock();
 
 
@@ -210,6 +210,38 @@ public class CASTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Test
+    public void testCountDownLatch2() {
+        CountDownLatch cdl = new CountDownLatch(1);
+        System.out.println("初始化 state=1");
+        Thread t1 = new Thread(() -> {
+            try {
+                cdl.await();
+                System.out.println("t1被唤醒");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        t1.start();
+
+        Thread t2 = new Thread(() -> {
+            try {
+                cdl.await();
+                System.out.println("t2被唤醒");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        t2.start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        cdl.countDown();
     }
 
 }
