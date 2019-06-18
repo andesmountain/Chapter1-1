@@ -17,7 +17,7 @@ public class UserFuture {
                             sum += i;
                             // System.out.println(sum);
 
-                            // 如果interrupt,sleep会报错，直接throws Exception，但这并不是interrupt使程序中断的
+                            // 如果interrupt,sleep会报错，直接throws Exception，但这并不是interrupt使call()中断的，而是interrupt导致Thread.sleep报错跳出方法的
                             // Thread.sleep(1);
                             System.out.println("sum=" + sum);
                             if (Thread.currentThread().isInterrupted()) {

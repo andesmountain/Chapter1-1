@@ -25,7 +25,7 @@ public class SemaphoreTest {
                     sem.acquire();
                     System.out.println(Thread.currentThread().getName()+" acquired");
                     Thread.sleep(1000);
-                    //sem.release();
+                    sem.release();
                     System.out.println(Thread.currentThread().getName()+" released,remain "+sem.availablePermits());
 
                 } catch (InterruptedException e) {
