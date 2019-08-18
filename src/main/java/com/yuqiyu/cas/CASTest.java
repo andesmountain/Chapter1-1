@@ -60,6 +60,13 @@ public class CASTest {
     public void userAtomicReference() {
         UserInfo ui = new UserInfo("zhu", 29);
         AtomicReference<UserInfo> ar = new AtomicReference<>(ui);
+        // 改变属性不会改变对象地址，所以还是会执行compareAndSet
+        ui.setAge(99);
+
+        // 改变对象地址，会compare失败,不会替换成yin
+        // ui = new UserInfo("abc",88);
+
+
         UserInfo updateUser = new UserInfo("yin", 28);
         ar.compareAndSet(ui, updateUser);
 
