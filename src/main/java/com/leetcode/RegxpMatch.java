@@ -16,6 +16,7 @@ public class RegxpMatch {
                 (pattern.charAt(0) == text.charAt(0) || pattern.charAt(0) == '.'));
 
         if (pattern.length() >= 2 && pattern.charAt(1) == '*'){
+            // * 对应前面0个   或  多个字符
             return (isMatch(text, pattern.substring(2)) ||
                     (first_match && isMatch(text.substring(1), pattern)));
         } else {
@@ -24,7 +25,7 @@ public class RegxpMatch {
     }
 
     public static void main(String[] args) {
-        System.out.println(isMatch("abcdebf","a.*"));
+        System.out.println(isMatch("ccccdebf","c*debf"));
     }
 
 }

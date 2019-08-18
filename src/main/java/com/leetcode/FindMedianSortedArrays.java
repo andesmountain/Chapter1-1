@@ -14,6 +14,7 @@ public class FindMedianSortedArrays {
         int m = nums1.length;
         int n = nums2.length;
         if(m>n){
+            // 这样就能保证如果有数组空了，一定是 len1
             return findMedianSortedArrays(nums2,nums1);
         }
 
