@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class LastSubstring {
+public class Q1163_LastSubstring {
     public static String lastSubstring(String s) {
         int max = 0;
         List<Integer> list = new ArrayList<>();
