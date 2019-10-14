@@ -25,10 +25,17 @@ public class Q40_CombinationSum2 {
 
 
     public void combine(int[] candidates, int right, int target,    List<Integer> solution){
+        if(right<0){
+            return;
+        }
         int value = candidates[right];
         if(target==0){
             lists.add(new ArrayList<>(solution));
+        }else if(target<0){
+            return;
         }
+
+
         if(right==0){
             if(target==value){
                 List<Integer> clone = new ArrayList<>(solution);
@@ -37,18 +44,20 @@ public class Q40_CombinationSum2 {
             }
         }else {
             int i=0;
-            while (i * value <= target && i<=1) {
-                int remain = target - i * value;
+            while (right>=0) {
+                value = candidates[right];
+                int remain = target -  candidates[right];
                 List<Integer> clone = new ArrayList<>(solution);
-                for (int k = 0; k < i; k++) {
-                    clone.add(value);
-                }
+                clone.add(candidates[right]);
                 if (remain == 0) {
                     lists.add(clone);
-                } else {
+                }else {
                     combine(candidates, right - 1, remain, clone);
                 }
-                i++;
+                right--;
+                while(right>=0 && candidates[right] == value ){
+                    right--;
+                }
             }
         }
 
@@ -57,7 +66,7 @@ public class Q40_CombinationSum2 {
 
     public static void main(String[] args) {
         Q40_CombinationSum2 q = new Q40_CombinationSum2();
-        q.combinationSum2(new int[]{10,1,2,7,6,1,5},8);
+        q.combinationSum2(new int[]{2,5,2,1,2},5);
 
     }
 
