@@ -17,6 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  **/
 public class ThreadPoolTest {
 
+    private static AtomicInteger ai = new AtomicInteger();
+
     @Test
     public void execute() throws InterruptedException {
         System.out.println("1.线程数<corePoolSize,直接从线程池取一个线程，corePool相当于是正式工；");
@@ -29,10 +31,12 @@ public class ThreadPoolTest {
 
         ExecutorService es = new ThreadPoolExecutor(3,5,10,
                 TimeUnit.SECONDS,new ArrayBlockingQueue<>(10),Executors.defaultThreadFactory(),new ThreadPoolExecutor.AbortPolicy());
+        // Executors.newFixedThreadPool()
         ExecutorService linkedBlockingService= new ThreadPoolExecutor(3,3,10,
                 TimeUnit.SECONDS,new LinkedBlockingQueue<>(),Executors.defaultThreadFactory(),new ThreadPoolExecutor.AbortPolicy());
 
-        CountDownLatch cdl = new CountDownLatch(30);
+
+        CountDownLatch cdl = new CountDownLatch(15);
         for(int i=0;i<15;i++){
             linkedBlockingService.execute(()->{
                 try {
@@ -45,7 +49,8 @@ public class ThreadPoolTest {
                         +((ThreadPoolExecutor) linkedBlockingService).getActiveCount()+",queue remain capacity:"+   ((ThreadPoolExecutor) linkedBlockingService).getQueue().remainingCapacity());
             });
 
-          /*  es.execute(()->{
+
+            /*es.execute(()->{
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -201,6 +206,46 @@ public class ThreadPoolTest {
         System.out.println("take sleep time:"+ai+"s");
         System.out.println("spend time:"+ (int)(System.currentTimeMillis()-start)/1000);
 
+
+    }
+
+
+    @Test
+    public void singleThreadPool() throws InterruptedException {
+        // 一次只能执行一个任务   从队列里拿
+        ExecutorService es = Executors.newSingleThreadExecutor();
+        CountDownLatch cdl = new CountDownLatch(1);
+        for(int i=0;i<15;i++){
+            es.execute(()->{
+                try {
+                    Thread.sleep(1000);
+                    System.out.println(Thread.currentThread()+"完成");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        cdl.await();
+
+    }
+
+
+
+    @Test
+    public void cachedThreadPool() throws InterruptedException {
+        ExecutorService es = Executors.newCachedThreadPool();
+        CountDownLatch cdl = new CountDownLatch(1);
+        for(int i=0;i<15;i++){
+            es.execute(()->{
+                try {
+                    Thread.sleep(1000);
+                    System.out.println(Thread.currentThread()+"完成");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        cdl.await();
 
     }
 
