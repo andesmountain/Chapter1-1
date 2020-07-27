@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jack="http://www.springframework.org/schema/jack"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+               http://www.springframework.org/schema/jack http://www.springframework.org/schema/jack.xsd
+">
+
+    <jack:redis id="conn" stuName="abc" gender="6096"></jack:redis>
+
+    <!--<context:component-scan base-package="com.yuqiyu.lessonOne"></context:component-scan>-->
+
+    <bean id="personA" class="com.yuqiyu.lessonOne.entity.Person" p:age="18" p:name="abc"></bean>
+
+
+
+
+
+    <bean id="personServiceImp" class="com.yuqiyu.lessonOne.Service.PersonServiceImp"></bean>
+
+    <bean id="logArgsAdvice" class="com.yuqiyu.lessonOne.advice.LogArgsAdvice"></bean>
+
+    <bean id="logResultAdvice" class="com.yuqiyu.lessonOne.advice.LogResultAdvice"></bean>
+
+    <!--
+    &lt;!&ndash; advisor &ndash;&gt;
+    <bean id="logArgsAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="advice" ref="logArgsAdvice"/>
+        <property name="pattern" value="com.yuqiyu.lessonOne.Service.*" />
+    </bean>
+
+    <bean id="logResultAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="advice" ref="logResultAdvice"/>
+        <property name="pattern" value="com.yuqiyu.lessonOne.Service.*" />
+    </bean>
+
+    &lt;!&ndash; 使得advisor自动生效 &ndash;&gt;
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>-->
+</beans>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping
 public class HelloWordController {
+
     /**
      * 测试输出HelloWord
      * @return

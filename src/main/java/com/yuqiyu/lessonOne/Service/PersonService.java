@@ -1,7 +1,8 @@
 package com.yuqiyu.lessonOne.Service;
 
+import com.yuqiyu.lessonOne.entity.Person;
 import org.springframework.stereotype.Service;
 
-@Service
-public class PersonService {
+public interface PersonService {
+    Person queryPerson();
 }

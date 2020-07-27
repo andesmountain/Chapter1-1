@@ -3,9 +3,29 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="person" class="com.yuqiyu.lessonOne.entity.Person">
+    <bean id="student" class="com.yuqiyu.lessonOne.entity.Student">
+        <property name="stuName" value="xuesheng"></property>
+    </bean>
+
+    <bean id="personConfig" class="com.yuqiyu.lessonOne.config.PersonConfig"></bean>
+
+    <bean id="person" class="com.yuqiyu.lessonOne.entity.Person" init-method="init">
         <property name="name" value="zhu"></property>
         <property name="age" value="19"></property>
+        <property name="stu" ref="student"></property>
     </bean>
+
+    <bean id="reName" class="com.yuqiyu.lessonOne.entity.ReplaceOldName"></bean>
+
+    <bean id="animal" class="com.yuqiyu.lessonOne.entity.Animal" init-method="init" destroy-method="destroy">
+        <!-- setter注入属性 -->
+        <property name="dog" ref="dog"></property>
+        <!-- 实现createDog方法 -->
+        <lookup-method name="createDog" bean="dog" />
+        <replaced-method name="oldName" replacer="reName"/>
+    </bean>
+
+    <!-- prototype 每次getBean都是新的对象 -->
+    <bean id="dog" class="com.yuqiyu.lessonOne.entity.Dog" scope="prototype"></bean>
 
 </beans>
